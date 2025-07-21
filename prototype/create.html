@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>创建图片 - AI画廊</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            background-color: #f5f5f5;
+            padding-bottom: 20px;
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            background-color: white;
+            padding: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 99;
+        }
+        .back-btn {
+            margin-right: 10px;
+            font-size: 20px;
+        }
+        .container {
+            padding: 20px;
+        }
+        .input-label {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        .input-description {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 15px;
+        }
+        .input-area {
+            background-color: white;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+        }
+        .prompt-input {
+            width: 100%;
+            min-height: 100px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 16px;
+            resize: none;
+            margin-bottom: 15px;
+        }
+        .prompt-input:focus {
+            outline: none;
+            border-color: #0052d9;
+        }
+        .prompt-input::placeholder {
+            color: #aaa;
+        }
+        .tags-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .tag {
+            background-color: #f0f5ff;
+            color: #0052d9;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            cursor: pointer;
+            border: 1px solid #d6e4ff;
+        }
+        .negative-input {
+            width: 100%;
+            min-height: 60px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 16px;
+            resize: none;
+            margin-bottom: 5px;
+        }
+        .negative-input:focus {
+            outline: none;
+            border-color: #0052d9;
+        }
+        .negative-input::placeholder {
+            color: #aaa;
+        }
+        .generate-btn {
+            background-color: #0052d9;
+            color: white;
+            width: 100%;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 82, 217, 0.3);
+            margin-top: 20px;
+        }
+        .inspiration-btn {
+            background-color: #f0f5ff;
+            color: #0052d9;
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            text-align: center;
+            border: 1px solid #d6e4ff;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="back-btn">←</div>
+        创建图片
+    </div>
+    
+    <div class="container">
+        <div class="input-area">
+            <div class="input-label">提示词</div>
+            <div class="input-description">描述你想要的图片内容，格式：主角 + 场景 + 风格</div>
+            
+            <textarea class="prompt-input" placeholder="例如：一只可爱的小猫，坐在窗台上，阳光透过窗户，写实风格"></textarea>
+            
+            <div class="inspiration-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: inline; vertical-align: middle; margin-right: 5px;">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="16" x2="12" y2="12"></line>
+                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                </svg>
+                给我一些灵感
+            </div>
+            
+            <div class="input-label">常用词</div>
+            <div class="tags-container">
+                <div class="tag">写实</div>
+                <div class="tag">动漫</div>
+                <div class="tag">电影感</div>
+                <div class="tag">梦幻</div>
+                <div class="tag">科幻</div>
+                <div class="tag">水彩</div>
+                <div class="tag">赛博朋克</div>
+                <div class="tag">油画</div>
+            </div>
+            
+            <div class="input-label">不想要的内容（可选）</div>
+            <textarea class="negative-input" placeholder="例如：模糊、变形、文字、低质量"></textarea>
+        </div>
+        
+        <div class="generate-btn">生成图片</div>
+    </div>
+</body>
+</html> 

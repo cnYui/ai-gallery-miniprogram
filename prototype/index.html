@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI画廊小程序原型</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+        .device-container {
+            width: 390px; /* iPhone 15 Pro 宽度 */
+            height: 844px; /* iPhone 15 Pro 高度 */
+            border-radius: 40px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            margin: 20px;
+            background-color: white;
+            position: relative;
+        }
+        .device-header {
+            height: 30px;
+            background-color: #000;
+            position: relative;
+        }
+        .device-notch {
+            position: absolute;
+            width: 150px;
+            height: 30px;
+            background-color: #000;
+            left: 50%;
+            transform: translateX(-50%);
+            border-bottom-left-radius: 15px;
+            border-bottom-right-radius: 15px;
+        }
+        .device-screen {
+            height: calc(100% - 30px);
+            width: 100%;
+            border: none;
+        }
+        .prototype-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .prototype-label {
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <h1 class="text-3xl font-bold text-center my-8">AI画廊小程序原型</h1>
+    
+    <div class="prototype-grid">
+        <!-- 首页 -->
+        <div class="flex flex-col items-center">
+            <div class="prototype-label">首页</div>
+            <div class="device-container">
+                <div class="device-header">
+                    <div class="device-notch"></div>
+                </div>
+                <iframe src="home.html" class="device-screen"></iframe>
+            </div>
+        </div>
+        
+        <!-- 我的页面 (未登录) -->
+        <div class="flex flex-col items-center">
+            <div class="prototype-label">我的 (未登录)</div>
+            <div class="device-container">
+                <div class="device-header">
+                    <div class="device-notch"></div>
+                </div>
+                <iframe src="profile-not-logged.html" class="device-screen"></iframe>
+            </div>
+        </div>
+        
+        <!-- 我的页面 (已登录) -->
+        <div class="flex flex-col items-center">
+            <div class="prototype-label">我的 (已登录)</div>
+            <div class="device-container">
+                <div class="device-header">
+                    <div class="device-notch"></div>
+                </div>
+                <iframe src="profile-logged.html" class="device-screen"></iframe>
+            </div>
+        </div>
+        
+        <!-- 创建图片页面 -->
+        <div class="flex flex-col items-center">
+            <div class="prototype-label">创建图片</div>
+            <div class="device-container">
+                <div class="device-header">
+                    <div class="device-notch"></div>
+                </div>
+                <iframe src="create.html" class="device-screen"></iframe>
+            </div>
+        </div>
+        
+        <!-- 图片生成结果页面 -->
+        <div class="flex flex-col items-center">
+            <div class="prototype-label">图片生成结果</div>
+            <div class="device-container">
+                <div class="device-header">
+                    <div class="device-notch"></div>
+                </div>
+                <iframe src="result.html" class="device-screen"></iframe>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
