@@ -1,0 +1,49 @@
+/* create.wxss */
+.container {
+  padding: 30rpx;
+}
+
+.input-area {
+  padding: 30rpx;
+  margin-bottom: 40rpx;
+}
+
+.input-label {
+  font-size: 32rpx;
+  font-weight: bold;
+  margin-bottom: 20rpx;
+  color: #333;
+}
+
+.input-description {
+  font-size: 28rpx;
+  color: #666;
+  margin-bottom: 30rpx;
+}
+
+.prompt-input {
+  margin-bottom: 30rpx;
+}
+
+.inspiration-btn {
+  margin-bottom: 40rpx;
+}
+
+.tags-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20rpx;
+  margin-bottom: 30rpx;
+}
+
+.tag {
+  margin-right: 0 !important;
+}
+
+.negative-input {
+  margin-bottom: 10rpx;
+}
+
+.generate-btn {
+  margin-top: 40rpx;
+} 

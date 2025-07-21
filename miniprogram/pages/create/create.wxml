@@ -1,0 +1,64 @@
+<view class="container">
+  <view class="input-area card">
+    <view class="input-label">提示词</view>
+    <view class="input-description">描述你想要的图片内容，格式：主角 + 场景 + 风格</view>
+    
+    <t-textarea 
+      class="prompt-input" 
+      placeholder="例如：一只可爱的小猫，坐在窗台上，阳光透过窗户，写实风格" 
+      maxlength="200"
+      indicator
+      value="{{prompt}}"
+      bind:change="onPromptChange"
+    ></t-textarea>
+    
+    <t-button 
+      theme="light" 
+      size="medium" 
+      icon="help-circle" 
+      block 
+      class="inspiration-btn"
+      bind:tap="showInspirationDialog"
+    >
+      给我一些灵感
+    </t-button>
+    
+    <view class="input-label">常用词</view>
+    <view class="tags-container">
+      <t-tag 
+        wx:for="{{commonTags}}" 
+        wx:key="index"
+        variant="light" 
+        theme="primary" 
+        class="tag"
+        data-tag="{{item}}"
+        bind:tap="onTagTap"
+      >{{item}}</t-tag>
+    </view>
+    
+    <view class="input-label">不想要的内容（可选）</view>
+    <t-textarea 
+      class="negative-input" 
+      placeholder="例如：模糊、变形、文字、低质量" 
+      maxlength="100"
+      indicator
+      value="{{negativePrompt}}"
+      bind:change="onNegativePromptChange"
+    ></t-textarea>
+  </view>
+  
+  <t-button 
+    theme="primary" 
+    size="large" 
+    block 
+    class="generate-btn"
+    loading="{{isGenerating}}"
+    disabled="{{!prompt || isGenerating}}"
+    bind:tap="onGenerateTap"
+  >
+    {{isGenerating ? '生成中...' : '生成图片'}}
+  </t-button>
+  
+  <!-- 提示消息 -->
+  <t-toast id="t-toast" />
+</view> 

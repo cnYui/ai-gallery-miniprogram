@@ -1,28 +1,24 @@
 <!--index.wxml-->
-<scroll-view class="scrollarea" scroll-y type="list">
-  <view class="container">
-    <view class="userinfo">
-      <block wx:if="{{canIUseNicknameComp && !hasUserInfo}}">
-        <button class="avatar-wrapper" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
-          <image class="avatar" src="{{userInfo.avatarUrl}}"></image>
-        </button>
-        <view class="nickname-wrapper">
-          <text class="nickname-label">昵称</text>
-          <input type="nickname" class="nickname-input" placeholder="请输入昵称" bind:change="onInputChange" />
-        </view>
-      </block>
-      <block wx:elif="{{!hasUserInfo}}">
-        <button wx:if="{{canIUseGetUserProfile}}" bindtap="getUserProfile"> 获取头像昵称 </button>
-        <view wx:else> 请使用2.10.4及以上版本基础库 </view>
-      </block>
-      <block wx:else>
-        <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
-        <text class="userinfo-nickname">{{userInfo.nickName}}</text>
-      </block>
+<view class="container">
+  <view class="image-grid">
+    <view class="image-card" wx:for="{{imageList}}" wx:key="id" bindtap="onImageTap" data-id="{{item.id}}">
+      <view class="image-container">
+        <image class="image" src="{{item.imageUrl}}" mode="aspectFill" lazy-load></image>
+      </view>
+      <view class="image-info">
+        <view class="image-prompt">{{item.prompt}}</view>
+      </view>
     </view>
-    <view class="usermotto">
-      <text class="user-motto">{{motto}}</text>
-    </view>
-    <t-button theme="primary">按钮</t-button>
   </view>
-</scroll-view>
+  
+  <!-- 加载更多提示 -->
+  <view class="loading-container" wx:if="{{isLoading}}">
+    <t-loading theme="circular" size="40rpx" text="加载中..." inherit-color></t-loading>
+  </view>
+  
+  <!-- 创建按钮 -->
+  <t-fab icon="add" button-props="{{fabButton}}" bind:click="onCreateTap"></t-fab>
+  
+  <!-- 提示消息 -->
+  <t-toast id="t-toast" />
+</view>

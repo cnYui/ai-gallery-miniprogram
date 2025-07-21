@@ -1,0 +1,41 @@
+<!-- 未登录状态 -->
+<view class="container" wx:if="{{!isLoggedIn}}">
+  <view class="login-container">
+    <view class="login-icon">👤</view>
+    <view class="login-text">登录后可以查看和管理您的AI画作</view>
+    <t-button theme="primary" size="large" icon="logo-wechat" bind:tap="onLoginTap">微信一键登录</t-button>
+  </view>
+</view>
+
+<!-- 已登录状态 -->
+<view class="container" wx:else>
+  <view class="profile-header card">
+    <t-avatar image="{{userInfo.avatarUrl}}" size="large" class="avatar"></t-avatar>
+    <view class="user-info">
+      <view class="nickname">{{userInfo.nickName}}</view>
+      <view class="user-stats">已创作 {{creationCount}} 幅作品</view>
+    </view>
+    <t-button theme="default" size="small" bind:tap="onLogoutTap" class="logout-btn">退出</t-button>
+  </view>
+  
+  <view class="section-title card">我的画廊</view>
+  
+  <view class="image-grid" wx:if="{{myImages.length > 0}}">
+    <view class="image-card" wx:for="{{myImages}}" wx:key="id">
+      <view class="image-container">
+        <image class="image" src="{{item.imageUrl}}" mode="aspectFill" lazy-load></image>
+      </view>
+      <view class="image-info">
+        <view class="image-prompt">{{item.prompt}}</view>
+      </view>
+    </view>
+  </view>
+  
+  <view class="empty-gallery" wx:else>
+    <view class="empty-text">您还没有创作作品</view>
+    <t-button theme="primary" size="medium" bind:tap="onCreateTap">立即创作</t-button>
+  </view>
+</view>
+
+<!-- 提示消息 -->
+<t-toast id="t-toast" />

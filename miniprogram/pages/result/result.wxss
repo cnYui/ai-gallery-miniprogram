@@ -1,0 +1,55 @@
+/* result.wxss */
+.container {
+  padding: 30rpx;
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 70vh;
+}
+
+.result-card {
+  margin-bottom: 40rpx;
+}
+
+.image-container {
+  width: 100%;
+  padding-bottom: 100%;
+  position: relative;
+}
+
+.result-image {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.prompt-container {
+  padding: 30rpx;
+  border-top: 1px solid #eee;
+}
+
+.prompt-label {
+  font-size: 28rpx;
+  color: #666;
+  margin-bottom: 10rpx;
+}
+
+.prompt-text {
+  font-size: 32rpx;
+  color: #333;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 30rpx;
+  margin-top: 40rpx;
+}
+
+.regenerate-btn, .publish-btn {
+  flex: 1;
+} 

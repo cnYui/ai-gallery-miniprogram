@@ -1,0 +1,74 @@
+/* profile.wxss */
+.login-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: calc(100vh - 200rpx);
+  padding: 40rpx;
+}
+
+.login-icon {
+  font-size: 100rpx;
+  margin-bottom: 40rpx;
+  opacity: 0.8;
+}
+
+.login-text {
+  font-size: 32rpx;
+  color: #666;
+  margin-bottom: 60rpx;
+  text-align: center;
+}
+
+.profile-header {
+  padding: 40rpx;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.logout-btn {
+  position: absolute;
+  right: 40rpx;
+  top: 40rpx;
+}
+
+.avatar {
+  margin-right: 30rpx;
+}
+
+.user-info {
+  flex: 1;
+}
+
+.nickname {
+  font-size: 36rpx;
+  font-weight: bold;
+  margin-bottom: 10rpx;
+}
+
+.user-stats {
+  font-size: 28rpx;
+  color: #666;
+}
+
+.section-title {
+  padding: 30rpx;
+  font-size: 32rpx;
+  font-weight: bold;
+}
+
+.empty-gallery {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 100rpx 0;
+}
+
+.empty-text {
+  font-size: 30rpx;
+  color: #999;
+  margin-bottom: 40rpx;
+}

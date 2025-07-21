@@ -1,5 +1,6 @@
 {
-  "usingComponents": {
-  "t-button": "tdesign-miniprogram/button/button"
-  }
+  "navigationBarTitleText": "AI画廊",
+  "enablePullDownRefresh": true,
+  "onReachBottomDistance": 50,
+  "usingComponents": {}
 }

@@ -1,0 +1,45 @@
+<view class="container">
+  <!-- 加载中状态 -->
+  <view class="loading-container" wx:if="{{isLoading}}">
+    <t-loading theme="circular" size="80rpx" text="正在生成图片，请稍候..." inherit-color></t-loading>
+  </view>
+  
+  <!-- 结果展示 -->
+  <view class="result-content" wx:else>
+    <view class="result-card card">
+      <view class="image-container">
+        <image class="result-image" src="{{imageUrl}}" mode="aspectFill" show-menu-by-longpress bind:tap="previewImage"></image>
+      </view>
+      <view class="prompt-container">
+        <view class="prompt-label">提示词</view>
+        <view class="prompt-text">{{prompt}}</view>
+      </view>
+    </view>
+    
+    <!-- 操作按钮 -->
+    <view class="action-buttons">
+      <t-button 
+        theme="light" 
+        size="large" 
+        variant="outline"
+        icon="refresh" 
+        block 
+        class="regenerate-btn"
+        bind:tap="onRegenerateTap"
+      >重新生成</t-button>
+      
+      <t-button 
+        theme="primary" 
+        size="large" 
+        icon="check" 
+        block 
+        class="publish-btn"
+        loading="{{isPublishing}}"
+        bind:tap="onPublishTap"
+      >{{isPublishing ? '发布中...' : '发布作品'}}</t-button>
+    </view>
+  </view>
+  
+  <!-- 提示消息 -->
+  <t-toast id="t-toast" />
+</view> 

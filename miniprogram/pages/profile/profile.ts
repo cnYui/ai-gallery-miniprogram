@@ -1,0 +1,307 @@
+// profile.ts
+import { Toast } from 'tdesign-miniprogram';
+
+Page({
+  data: {
+    isLoggedIn: false,
+    userInfo: {
+      avatarUrl: '',
+      nickName: '',
+      openid: '',
+    },
+    creationCount: 0,
+    myImages: [] as Array<{
+      id: string;
+      imageUrl: string;
+      prompt: string;
+      createTime: Date;
+    }>,
+  },
+
+  onLoad() {
+    // 检查是否已登录
+    this.checkLoginStatus();
+  },
+
+  onShow() {
+    // 如果已登录，刷新用户作品
+    if (this.data.isLoggedIn) {
+      this.loadUserImages();
+    }
+  },
+
+  checkLoginStatus() {
+    // 检查云开发登录状态
+    wx.cloud.callFunction({
+      name: 'login',
+      success: (res: any) => {
+        if (res.result && res.result.openid) {
+          // 用户已登录，获取用户信息
+          this.getUserInfo(res.result.openid);
+        } else {
+          this.setData({
+            isLoggedIn: false,
+          });
+        }
+      },
+      fail: (err) => {
+        console.error('检查登录状态失败', err);
+        this.setData({
+          isLoggedIn: false,
+        });
+      }
+    });
+  },
+
+  // 获取用户信息
+  getUserInfo(openid: string) {
+    const db = wx.cloud.database();
+    db.collection('users').where({
+      _openid: openid
+    }).get({
+      success: (res) => {
+        if (res.data.length > 0) {
+          const userInfo = res.data[0];
+          this.setData({
+            isLoggedIn: true,
+            userInfo: {
+              avatarUrl: userInfo.avatarUrl,
+              nickName: userInfo.nickName,
+              openid: openid
+            }
+          });
+          this.loadUserImages();
+        } else {
+          // 用户信息不存在，需要注册
+          this.setData({
+            isLoggedIn: false,
+          });
+        }
+      },
+      fail: (err) => {
+        console.error('获取用户信息失败', err);
+        this.setData({
+          isLoggedIn: false,
+        });
+      }
+    });
+  },
+
+  onLoginTap() {
+    // 微信授权登录
+    Toast({
+      context: this,
+      selector: '#t-toast',
+      message: '登录中...',
+      theme: 'loading',
+      direction: 'column',
+    });
+
+    // 获取用户信息授权
+    wx.getUserProfile({
+      desc: '用于完善用户资料',
+      success: (res) => {
+        const userInfo = res.userInfo;
+        
+        // 调用云函数进行登录
+        wx.cloud.callFunction({
+          name: 'login',
+          success: (loginRes: any) => {
+            if (loginRes.result && loginRes.result.openid) {
+              const openid = loginRes.result.openid;
+              
+              // 将用户信息保存到云数据库
+              this.saveUserInfo(openid, userInfo);
+            } else {
+              Toast({
+                context: this,
+                selector: '#t-toast',
+                message: '登录失败，请重试',
+                theme: 'error',
+                direction: 'column',
+              });
+            }
+          },
+          fail: (err) => {
+            console.error('云函数调用失败', err);
+            Toast({
+              context: this,
+              selector: '#t-toast',
+              message: '登录失败，请重试',
+              theme: 'error',
+              direction: 'column',
+            });
+          }
+        });
+      },
+      fail: (err) => {
+        console.error('获取用户信息失败', err);
+        Toast({
+          context: this,
+          selector: '#t-toast',
+          message: '需要授权才能使用完整功能',
+          theme: 'warning',
+          direction: 'column',
+        });
+      }
+    });
+  },
+
+  // 保存用户信息到云数据库
+  saveUserInfo(openid: string, userInfo: any) {
+    const db = wx.cloud.database();
+    
+    // 先检查用户是否已存在
+    db.collection('users').where({
+      _openid: openid
+    }).get({
+      success: (res) => {
+        if (res.data.length > 0) {
+          // 用户已存在，更新信息
+          db.collection('users').doc(res.data[0]._id).update({
+            data: {
+              avatarUrl: userInfo.avatarUrl,
+              nickName: userInfo.nickName,
+              updateTime: new Date()
+            },
+            success: () => {
+              this.loginSuccess(openid, userInfo);
+            },
+            fail: (err) => {
+              console.error('更新用户信息失败', err);
+              Toast({
+                context: this,
+                selector: '#t-toast',
+                message: '登录失败，请重试',
+                theme: 'error',
+                direction: 'column',
+              });
+            }
+          });
+        } else {
+          // 新用户，创建记录
+          db.collection('users').add({
+            data: {
+              avatarUrl: userInfo.avatarUrl,
+              nickName: userInfo.nickName,
+              createTime: new Date(),
+              updateTime: new Date()
+            },
+            success: () => {
+              this.loginSuccess(openid, userInfo);
+            },
+            fail: (err) => {
+              console.error('创建用户信息失败', err);
+              Toast({
+                context: this,
+                selector: '#t-toast',
+                message: '登录失败，请重试',
+                theme: 'error',
+                direction: 'column',
+              });
+            }
+          });
+        }
+      },
+      fail: (err) => {
+        console.error('查询用户信息失败', err);
+        Toast({
+          context: this,
+          selector: '#t-toast',
+          message: '登录失败，请重试',
+          theme: 'error',
+          direction: 'column',
+        });
+      }
+    });
+  },
+
+  // 登录成功处理
+  loginSuccess(openid: string, userInfo: any) {
+    this.setData({
+      isLoggedIn: true,
+      userInfo: {
+        avatarUrl: userInfo.avatarUrl,
+        nickName: userInfo.nickName,
+        openid: openid
+      }
+    });
+    
+    Toast({
+      context: this,
+      selector: '#t-toast',
+      message: '登录成功',
+      theme: 'success',
+      direction: 'column',
+    });
+    
+    this.loadUserImages();
+  },
+
+  loadUserImages() {
+    // 从云数据库加载用户作品
+    const db = wx.cloud.database();
+    
+    db.collection('user_images').where({
+      _openid: this.data.userInfo.openid
+    }).orderBy('createTime', 'desc').get({
+      success: (res) => {
+        const images = res.data.map((item: any) => ({
+          id: item._id,
+          imageUrl: item.imageUrl,
+          prompt: item.prompt,
+          createTime: item.createTime
+        }));
+        
+        this.setData({
+          myImages: images,
+          creationCount: images.length,
+        });
+      },
+      fail: (err) => {
+        console.error('加载用户作品失败', err);
+        // 如果加载失败，显示空列表
+        this.setData({
+          myImages: [],
+          creationCount: 0,
+        });
+      }
+    });
+  },
+
+  onCreateTap() {
+    wx.navigateTo({
+      url: '/pages/create/create'
+    });
+  },
+
+  // 退出登录
+  onLogoutTap() {
+    wx.showModal({
+      title: '确认退出',
+      content: '确定要退出登录吗？',
+      success: (res) => {
+        if (res.confirm) {
+          this.setData({
+            isLoggedIn: false,
+            userInfo: {
+              avatarUrl: '',
+              nickName: '',
+              openid: '',
+            },
+            myImages: [],
+            creationCount: 0,
+          });
+          
+          Toast({
+            context: this,
+            selector: '#t-toast',
+            message: '已退出登录',
+            theme: 'success',
+            direction: 'column',
+          });
+        }
+      }
+    });
+  }
+});
