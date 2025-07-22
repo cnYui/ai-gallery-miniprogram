@@ -1,6 +1,9 @@
 /* result.wxss */
 .container {
   padding: 30rpx;
+  min-height: 100vh;
+  background-color: var(--bg-color);
+  transition: background-color 0.3s ease;
 }
 
 .loading-container {
@@ -11,8 +14,49 @@
   height: 70vh;
 }
 
+.status-text {
+  margin-top: 20rpx;
+  font-size: 28rpx;
+  color: var(--text-secondary);
+  text-align: center;
+  transition: color 0.3s ease;
+}
+
+.error-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 70vh;
+  text-align: center;
+}
+
+.error-icon {
+  font-size: 120rpx;
+  margin-bottom: 30rpx;
+}
+
+.error-text {
+  font-size: 32rpx;
+  color: #e34d59;
+  margin-bottom: 40rpx;
+  line-height: 1.5;
+}
+
+.error-actions {
+  display: flex;
+  gap: 20rpx;
+  width: 100%;
+  max-width: 400rpx;
+}
+
 .result-card {
   margin-bottom: 40rpx;
+  background-color: var(--card-bg);
+  border-radius: 24rpx;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .image-container {
@@ -30,26 +74,34 @@
 
 .prompt-container {
   padding: 30rpx;
-  border-top: 1px solid #eee;
+  border-top: 1px solid var(--border-color);
+  transition: border-color 0.3s ease;
 }
 
 .prompt-label {
   font-size: 28rpx;
-  color: #666;
+  color: var(--text-secondary);
   margin-bottom: 10rpx;
+  transition: color 0.3s ease;
 }
 
 .prompt-text {
   font-size: 32rpx;
-  color: #333;
+  color: var(--text-primary);
+  transition: color 0.3s ease;
 }
 
 .action-buttons {
   display: flex;
-  gap: 30rpx;
+  flex-direction: column;
+  gap: 20rpx;
   margin-top: 40rpx;
 }
 
-.regenerate-btn, .publish-btn {
-  flex: 1;
-} 
+.regenerate-btn, .publish-btn, .back-btn {
+  width: 100%;
+}
+
+.publish-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}

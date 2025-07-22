@@ -1,24 +1,33 @@
 /* create.wxss */
 .container {
   padding: 30rpx;
+  min-height: 100vh;
+  background-color: var(--bg-color);
+  transition: background-color 0.3s ease;
 }
 
 .input-area {
   padding: 30rpx;
   margin-bottom: 40rpx;
+  background-color: var(--card-bg);
+  border-radius: 24rpx;
+  box-shadow: var(--shadow);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .input-label {
   font-size: 32rpx;
   font-weight: bold;
   margin-bottom: 20rpx;
-  color: #333;
+  color: var(--text-primary);
+  transition: color 0.3s ease;
 }
 
 .input-description {
   font-size: 28rpx;
-  color: #666;
+  color: var(--text-secondary);
   margin-bottom: 30rpx;
+  transition: color 0.3s ease;
 }
 
 .prompt-input {
@@ -46,4 +55,4 @@
 
 .generate-btn {
   margin-top: 40rpx;
-} 
+}

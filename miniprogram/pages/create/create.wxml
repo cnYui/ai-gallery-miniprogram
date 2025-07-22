@@ -1,4 +1,8 @@
-<view class="container">
+<view class="container" data-theme="{{theme}}">
+  <!-- 主题切换按钮 -->
+  <view class="theme-toggle" bindtap="onThemeToggle">
+    <text>{{theme === 'light' ? '🌙' : '☀️'}}</text>
+  </view>
   <view class="input-area card">
     <view class="input-label">提示词</view>
     <view class="input-description">描述你想要的图片内容，格式：主角 + 场景 + 风格</view>
@@ -61,4 +65,4 @@
   
   <!-- 提示消息 -->
   <t-toast id="t-toast" />
-</view> 
+</view>

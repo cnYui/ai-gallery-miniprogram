@@ -10,9 +10,15 @@
 <!-- 已登录状态 -->
 <view class="container" wx:else>
   <view class="profile-header card">
-    <t-avatar image="{{userInfo.avatarUrl}}" size="large" class="avatar"></t-avatar>
+    <view class="avatar-container">
+      <t-avatar image="{{userInfo.avatarUrl}}" size="large" class="avatar"></t-avatar>
+      <t-button theme="default" size="extra-small" icon="edit" bind:tap="onEditAvatarTap" class="edit-avatar-btn">编辑</t-button>
+    </view>
     <view class="user-info">
-      <view class="nickname">{{userInfo.nickName}}</view>
+      <view class="nickname-container">
+        <view class="nickname">{{userInfo.nickName}}</view>
+        <t-button theme="default" size="extra-small" icon="edit" bind:tap="onEditNicknameTap" class="edit-nickname-btn">编辑</t-button>
+      </view>
       <view class="user-stats">已创作 {{creationCount}} 幅作品</view>
     </view>
     <t-button theme="default" size="small" bind:tap="onLogoutTap" class="logout-btn">退出</t-button>

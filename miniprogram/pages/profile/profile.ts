@@ -242,7 +242,7 @@ Page({
     // 从云数据库加载用户作品
     const db = wx.cloud.database();
     
-    db.collection('user_images').where({
+    db.collection('images').where({
       _openid: this.data.userInfo.openid
     }).orderBy('createTime', 'desc').get({
       success: (res) => {
@@ -301,6 +301,203 @@ Page({
             direction: 'column',
           });
         }
+      }
+    });
+  },
+
+  // 编辑头像
+  onEditAvatarTap() {
+    wx.chooseMedia({
+      count: 1,
+      mediaType: ['image'],
+      sourceType: ['album', 'camera'],
+      maxDuration: 30,
+      camera: 'back',
+      success: (res) => {
+        const tempFilePath = res.tempFiles[0].tempFilePath;
+        this.uploadAvatar(tempFilePath);
+      },
+      fail: (err) => {
+        // 用户取消选择不显示错误提示
+        if (err.errMsg !== 'chooseMedia:fail cancel') {
+          console.error('选择图片失败', err);
+          Toast({
+            context: this,
+            selector: '#t-toast',
+            message: '选择图片失败',
+            theme: 'error',
+          });
+        }
+      }
+    });
+  },
+
+  // 编辑昵称
+  onEditNicknameTap() {
+    wx.showModal({
+      title: '修改昵称',
+      editable: true,
+      placeholderText: '请输入新昵称',
+      success: (res) => {
+        if (res.confirm && res.content && res.content.trim()) {
+          const newNickname = res.content.trim();
+          this.updateUserNickname(newNickname);
+        }
+      }
+    });
+  },
+
+  // 上传头像到云存储
+  uploadAvatar(tempFilePath: string) {
+    Toast({
+      context: this,
+      selector: '#t-toast',
+      message: '上传中...',
+      theme: 'loading',
+      duration: 0,
+    });
+
+    const openid = this.data.userInfo.openid;
+    const cloudPath = `avatars/${openid}.jpg`;
+
+    wx.cloud.uploadFile({
+      cloudPath: cloudPath,
+      filePath: tempFilePath,
+      success: (uploadRes) => {
+        console.log('头像上传成功', uploadRes);
+        this.updateUserAvatar(uploadRes.fileID);
+      },
+      fail: (err) => {
+        console.error('头像上传失败', err);
+        wx.hideToast();
+        Toast({
+          context: this,
+          selector: '#t-toast',
+          message: '上传失败，请重试',
+          theme: 'error',
+        });
+      }
+    });
+  },
+
+  // 更新用户头像信息
+  updateUserAvatar(fileID: string) {
+    const db = wx.cloud.database();
+    const openid = this.data.userInfo.openid;
+
+    db.collection('users').where({
+      _openid: openid
+    }).get({
+      success: (res) => {
+        if (res.data.length > 0) {
+          const userId = res.data[0]._id;
+          
+          db.collection('users').doc(userId).update({
+            data: {
+              avatarUrl: fileID,
+              updateTime: new Date()
+            },
+            success: () => {
+              // 更新本地数据
+              this.setData({
+                'userInfo.avatarUrl': fileID
+              });
+              
+              wx.hideToast();
+              Toast({
+                context: this,
+                selector: '#t-toast',
+                message: '头像更新成功',
+                theme: 'success',
+              });
+            },
+            fail: (err) => {
+              console.error('更新头像信息失败', err);
+              wx.hideToast();
+              Toast({
+                context: this,
+                selector: '#t-toast',
+                message: '更新失败，请重试',
+                theme: 'error',
+              });
+            }
+          });
+        }
+      },
+      fail: (err) => {
+        console.error('查询用户信息失败', err);
+        wx.hideToast();
+        Toast({
+          context: this,
+          selector: '#t-toast',
+          message: '更新失败，请重试',
+          theme: 'error',
+        });
+      }
+    });
+  },
+
+  // 更新用户昵称
+  updateUserNickname(newNickname: string) {
+    Toast({
+      context: this,
+      selector: '#t-toast',
+      message: '更新中...',
+      theme: 'loading',
+      duration: 0,
+    });
+
+    const db = wx.cloud.database();
+    const openid = this.data.userInfo.openid;
+
+    db.collection('users').where({
+      _openid: openid
+    }).get({
+      success: (res) => {
+        if (res.data.length > 0) {
+          const userId = res.data[0]._id;
+          
+          db.collection('users').doc(userId).update({
+            data: {
+              nickName: newNickname,
+              updateTime: new Date()
+            },
+            success: () => {
+              // 更新本地数据
+              this.setData({
+                'userInfo.nickName': newNickname
+              });
+              
+              wx.hideToast();
+              Toast({
+                context: this,
+                selector: '#t-toast',
+                message: '昵称更新成功',
+                theme: 'success',
+              });
+            },
+            fail: (err) => {
+              console.error('更新昵称失败', err);
+              wx.hideToast();
+              Toast({
+                context: this,
+                selector: '#t-toast',
+                message: '更新失败，请重试',
+                theme: 'error',
+              });
+            }
+          });
+        }
+      },
+      fail: (err) => {
+        console.error('查询用户信息失败', err);
+        wx.hideToast();
+        Toast({
+          context: this,
+          selector: '#t-toast',
+          message: '更新失败，请重试',
+          theme: 'error',
+        });
       }
     });
   }

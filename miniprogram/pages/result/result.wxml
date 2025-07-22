@@ -1,7 +1,34 @@
-<view class="container">
+<view class="container" data-theme="{{theme}}">
+  <!-- 主题切换按钮 -->
+  <view class="theme-toggle" bind:tap="onThemeToggle">
+    <text class="theme-icon">{{theme === 'dark' ? '☀️' : '🌙'}}</text>
+  </view>
+  
   <!-- 加载中状态 -->
   <view class="loading-container" wx:if="{{isLoading}}">
-    <t-loading theme="circular" size="80rpx" text="正在生成图片，请稍候..." inherit-color></t-loading>
+    <t-loading theme="circular" size="80rpx" text="{{taskStatus === 'PENDING' ? '任务排队中...' : taskStatus === 'RUNNING' ? '正在生成图片...' : '正在处理...'}}" inherit-color></t-loading>
+    <view class="status-text">任务状态：{{taskStatus || '查询中'}}</view>
+  </view>
+  
+  <!-- 错误状态 -->
+  <view class="error-container" wx:elif="{{errorMessage}}">
+    <view class="error-icon">⚠️</view>
+    <view class="error-text">{{errorMessage}}</view>
+    <view class="error-actions">
+      <t-button 
+        theme="primary" 
+        size="medium" 
+        icon="refresh" 
+        bind:tap="onRegenerateTap"
+        loading="{{isRegenerating}}"
+      >{{isRegenerating ? '重新生成中...' : '重新生成'}}</t-button>
+      <t-button 
+        theme="light" 
+        size="medium" 
+        variant="outline"
+        bind:tap="onBackToCreate"
+      >返回创作</t-button>
+    </view>
   </view>
   
   <!-- 结果展示 -->
@@ -13,6 +40,8 @@
       <view class="prompt-container">
         <view class="prompt-label">提示词</view>
         <view class="prompt-text">{{prompt}}</view>
+        <view class="prompt-label" wx:if="{{negativePrompt}}">反向提示词</view>
+        <view class="prompt-text" wx:if="{{negativePrompt}}">{{negativePrompt}}</view>
       </view>
     </view>
     
@@ -26,20 +55,30 @@
         block 
         class="regenerate-btn"
         bind:tap="onRegenerateTap"
-      >重新生成</t-button>
+        loading="{{isRegenerating}}"
+      >{{isRegenerating ? '重新生成中...' : '重新生成'}}</t-button>
       
       <t-button 
         theme="primary" 
         size="large" 
-        icon="check" 
+        icon="upload" 
         block 
         class="publish-btn"
-        loading="{{isPublishing}}"
         bind:tap="onPublishTap"
-      >{{isPublishing ? '发布中...' : '发布作品'}}</t-button>
+        loading="{{isPublishing}}"
+      >{{isPublishing ? '发布中...' : '发布到画廊'}}</t-button>
+      
+      <t-button 
+        theme="light" 
+        size="large" 
+        icon="arrow-left" 
+        block 
+        class="back-btn"
+        bind:tap="onBackToCreate"
+      >返回创作</t-button>
     </view>
   </view>
   
   <!-- 提示消息 -->
   <t-toast id="t-toast" />
-</view> 
+</view>
