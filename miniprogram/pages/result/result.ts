@@ -10,6 +10,7 @@ Page({
     isLoading: true,
     isRegenerating: false,
     isPublishing: false,
+    isSaving: false,
     taskStatus: '',
     errorMessage: '',
     pollTimer: null as any,
@@ -312,6 +313,96 @@ Page({
         context: this,
         selector: '#t-toast',
         message: (error as any)?.message || '发布失败，请重试',
+        theme: 'error',
+      });
+    }
+  },
+
+  // 保存图片到本机
+  async onSaveImageTap() {
+    if (!this.data.imageUrl) {
+      Toast({
+        context: this,
+        selector: '#t-toast',
+        message: '没有可保存的图片',
+        theme: 'error',
+      });
+      return;
+    }
+
+    this.setData({ isSaving: true });
+
+    Toast({
+      context: this,
+      selector: '#t-toast',
+      message: '正在保存图片...',
+      theme: 'loading',
+      direction: 'column',
+      duration: 0,
+    });
+
+    try {
+       // 下载图片到临时文件
+       const downloadResult = await new Promise<WechatMiniprogram.DownloadFileSuccessCallbackResult>((resolve, reject) => {
+         wx.downloadFile({
+           url: this.data.imageUrl,
+           success: resolve,
+           fail: reject
+         });
+       });
+
+       if (downloadResult.statusCode === 200) {
+         // 保存图片到相册
+         await new Promise<WechatMiniprogram.GeneralCallbackResult>((resolve, reject) => {
+           wx.saveImageToPhotosAlbum({
+             filePath: downloadResult.tempFilePath,
+             success: resolve,
+             fail: reject
+           });
+         });
+
+         wx.hideToast();
+         this.setData({ isSaving: false });
+
+         Toast({
+           context: this,
+           selector: '#t-toast',
+           message: '图片已保存到相册',
+           theme: 'success',
+         });
+       } else {
+         throw new Error('下载图片失败');
+       }
+    } catch (error: any) {
+      console.error('保存图片失败:', error);
+      wx.hideToast();
+      this.setData({ isSaving: false });
+
+      let errorMessage = '保存失败，请重试';
+      
+      // 处理权限相关错误
+      if (error.errMsg && error.errMsg.includes('auth')) {
+        errorMessage = '请授权访问相册后重试';
+        
+        // 引导用户去设置页面开启权限
+        wx.showModal({
+          title: '需要相册权限',
+          content: '保存图片需要访问您的相册，请在设置中开启权限',
+          confirmText: '去设置',
+          cancelText: '取消',
+          success: (res) => {
+            if (res.confirm) {
+              wx.openSetting();
+            }
+          }
+        });
+        return;
+      }
+
+      Toast({
+        context: this,
+        selector: '#t-toast',
+        message: errorMessage,
         theme: 'error',
       });
     }

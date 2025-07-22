@@ -3,7 +3,8 @@
   <view class="image-grid">
     <view class="image-card" wx:for="{{imageList}}" wx:key="id" bindtap="onImageTap" data-id="{{item.id}}">
       <view class="image-container">
-        <image class="image" src="{{item.imageUrl}}" mode="aspectFill" lazy-load></image>
+        <image class="image" src="{{item.imageUrl}}" mode="aspectFill" lazy-load bindlongpress="onImageLongPress" data-url="{{item.imageUrl}}" data-prompt="{{item.prompt}}"></image>
+        <view class="save-hint" wx:if="{{item.showSaveHint}}">长按保存图片</view>
       </view>
       <view class="image-info">
         <view class="image-prompt">{{item.prompt}}</view>

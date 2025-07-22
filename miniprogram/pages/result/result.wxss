@@ -98,8 +98,12 @@
   margin-top: 40rpx;
 }
 
-.regenerate-btn, .publish-btn, .back-btn {
+.regenerate-btn, .save-btn, .publish-btn, .back-btn {
   width: 100%;
+}
+
+.save-btn {
+  background: linear-gradient(135deg, #52c41a 0%, #389e0d 100%);
 }
 
 .publish-btn {

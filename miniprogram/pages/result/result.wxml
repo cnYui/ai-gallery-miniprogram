@@ -59,6 +59,16 @@
       >{{isRegenerating ? '重新生成中...' : '重新生成'}}</t-button>
       
       <t-button 
+        theme="success" 
+        size="large" 
+        icon="download" 
+        block 
+        class="save-btn"
+        bind:tap="onSaveImageTap"
+        loading="{{isSaving}}"
+      >{{isSaving ? '保存中...' : '保存到相册'}}</t-button>
+      
+      <t-button 
         theme="primary" 
         size="large" 
         icon="upload" 

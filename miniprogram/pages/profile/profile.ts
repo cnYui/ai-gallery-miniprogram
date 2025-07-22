@@ -239,12 +239,17 @@ Page({
   },
 
   loadUserImages() {
+    if (!this.data.userInfo.openid) return;
+    
     // 从云数据库加载用户作品
     const db = wx.cloud.database();
     
     db.collection('images').where({
       _openid: this.data.userInfo.openid
-    }).orderBy('createTime', 'desc').get({
+    })
+    .orderBy('createTime', 'desc')
+    .limit(20) // 限制返回数量，提升性能
+    .get({
       success: (res) => {
         const images = res.data.map((item: any) => ({
           id: item._id,
@@ -260,6 +265,13 @@ Page({
       },
       fail: (err) => {
         console.error('加载用户作品失败', err);
+        Toast({
+          context: this,
+          selector: '#t-toast',
+          message: '加载作品失败，请重试',
+          theme: 'error',
+          direction: 'column',
+        });
         // 如果加载失败，显示空列表
         this.setData({
           myImages: [],
