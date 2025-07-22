@@ -11,6 +11,11 @@ node_modules/
 # WeChat MiniProgram
 miniprogram_npm/
 .miniprogram_npm/
+project.private.config.json
+
+# Cloud Development
+cloudfunctions/**/node_modules/
+cloudfunctions/**/.env
 
 # Build output
 .dist/
