@@ -48,5 +48,12 @@
     "scope.writePhotosAlbum": {
       "desc": "保存AI生成的图片到相册"
     }
-  }
+  },
+  "networkTimeout": {
+    "request": 60000,
+    "downloadFile": 60000
+  },
+  "requiredBackgroundModes": [],
+  "plugins": {},
+  "resizable": true
 }
